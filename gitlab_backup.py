@@ -22,12 +22,14 @@ except FileNotFoundError:
     with io.open("settings.yaml", "w", encoding="utf8") as outfile:
         yaml.dump(settings, outfile, default_flow_style=False, allow_unicode=True)
     exit()
-
+print("Starting the download")
 url = settings["GitLab"]["Base url"] + "/api/v4/projects"
 headers = {"Private-Token": settings["GitLab"]["Personal token"]}
 
 for repo in settings["Repositories"]["Archived"]:
-    bash_command = "git -C {} pull --all".format(repo["path"])
+    bash_command = "git -C {} pull --all".format(
+        settings["Repositories"]["Path"] + repo["path"]
+    )
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
 
@@ -40,6 +42,7 @@ for repo in r:
     )
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
+
     settings["Repositories"]["Archived"].append(
         {"url": repo["http_url_to_repo"], "path": repo["path_with_namespace"]}
     )
