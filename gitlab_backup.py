@@ -14,7 +14,7 @@ try:
 except FileNotFoundError:
     settings = {
         "GitLab": {
-            "Base url": "https//gitlab.com",
+            "Base url": "https://gitlab.com",
             "Personal token": "<PUT HERE THE TOKEN>",
         },
         "Repositories": {"Path": "repos/", "Archived": []},
