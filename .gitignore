@@ -102,7 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-settings.yaml
+settings.json
 .vscode
 output
 repos
