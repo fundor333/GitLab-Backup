@@ -28,10 +28,13 @@ def get_settings():
 
 
 def manage_repo(list_archived, settings, repo):
-    if repo["path_with_namespace"] in list_archived.keys():
+    if (
+        settings["Repositories"]["Path"] + repo["path_with_namespace"]
+        in list_archived.keys()
+    ):
         print("{} is old repo".format(repo["path_with_namespace"]))
         bash_command = "git -C {} pull --all".format(
-            settings["Repositories"]["Path"] + repo["path"]
+            settings["Repositories"]["Path"] + repo["path_with_namespace"]
         )
 
     else:
@@ -42,7 +45,10 @@ def manage_repo(list_archived, settings, repo):
         )
 
         settings["Repositories"]["Archived"].append(
-            {"url": repo["http_url_to_repo"], "path":settings["Repositories"]["Path"] + repo["path_with_namespace"]}
+            {
+                "url": repo["http_url_to_repo"],
+                "path": settings["Repositories"]["Path"] + repo["path_with_namespace"],
+            }
         )
 
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
