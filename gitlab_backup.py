@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     print("Starting the download")
 
-    url = settings["GitLab"]["Base url"] + "/api/v4/projects"
+    url = settings["GitLab"]["Base url"] + "/api/v4/projects?per_page=100"
     headers = {"Private-Token": settings["GitLab"]["Personal token"]}
 
     req = urllib.request.Request(url, headers=headers)
