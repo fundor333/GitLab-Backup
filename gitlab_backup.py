@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import io
 import json
 import subprocess
@@ -6,6 +5,7 @@ from datetime import datetime
 
 import requests
 from loguru import logger
+
 
 def get_settings():
     try:
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     headers = {"Private-Token": settings["GitLab"]["Personal token"]}
 
     req = requests.get(url, headers=headers)
-    r= req.json()
+    r = req.json()
     list_archived = {}
     for e in settings["Repositories"]["Archived"]:
         list_archived[e["path"]] = e["url"]

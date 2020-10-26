@@ -1,12 +1,15 @@
 import io
 import json
+import sys
+
+from loguru import logger
 
 
 def get_settings():
+    settings = None
     try:
         with open("settings.json", "r") as stream:
             settings = json.load(stream)
-        return settings
     except FileNotFoundError:
         settings = {
             "GitLab": {
@@ -18,4 +21,8 @@ def get_settings():
         }
         with io.open("settings.json", "w", encoding="utf8") as outfile:
             json.dump(settings, outfile)
-        exit()
+    finally:
+        logger.remove()
+        logger.add(sys.stderr, level="ERROR")
+        logger.add(sys.stdout, level=settings['GitLab']['logger_level'])
+        return settings
