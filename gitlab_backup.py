@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
+import io
 import json
 import subprocess
-import json
-import io
-import urllib, json
-import urllib.parse
 import urllib.request
 from datetime import datetime
 
+import requests
+from loguru import logger
 
 def get_settings():
     try:
@@ -60,21 +59,19 @@ def manage_repo(list_archived, settings, repo):
 if __name__ == "__main__":
     settings = get_settings()
 
-    print("Starting the download")
+    logger.info("Starting the download")
 
     url = settings["GitLab"]["Base url"] + "/api/v4/projects?per_page=100"
     headers = {"Private-Token": settings["GitLab"]["Personal token"]}
 
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response:
-        r = json.loads(response.read().decode())
-        list_archived = {}
-        for e in settings["Repositories"]["Archived"]:
-            list_archived[e["path"]] = e["url"]
-        for repo in r:
-            manage_repo(list_archived, settings, repo)
+    req = requests.get(url, headers=headers)
+    r= req.json()
+    list_archived = {}
+    for e in settings["Repositories"]["Archived"]:
+        list_archived[e["path"]] = e["url"]
+    for repo in r:
+        manage_repo(list_archived, settings, repo)
 
-        settings["Last"] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        with io.open("settings.json", "w") as outfile:
-            json.dump(settings, outfile)
-        exit()
+    settings["Last"] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    with io.open("settings.json", "w") as outfile:
+        json.dump(settings, outfile)

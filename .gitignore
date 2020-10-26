@@ -108,3 +108,4 @@ output
 repos
 Pipfile
 Pipfile.lock
+.idea
