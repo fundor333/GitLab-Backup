@@ -2,7 +2,6 @@
 import io
 import json
 import subprocess
-import urllib.request
 from datetime import datetime
 
 import requests
@@ -31,13 +30,13 @@ def manage_repo(list_archived, settings, repo):
         settings["Repositories"]["Path"] + repo["path_with_namespace"]
         in list_archived.keys()
     ):
-        print("{} is old repo".format(repo["path_with_namespace"]))
+        logger.info("{} is old repo".format(repo["path_with_namespace"]))
         bash_command = "git -C {} pull --all".format(
             settings["Repositories"]["Path"] + repo["path_with_namespace"]
         )
 
     else:
-        print("{} is new repo".format(repo["path_with_namespace"]))
+        logger.info("{} is new repo".format(repo["path_with_namespace"]))
         bash_command = "git clone --recurse-submodules {} {}".format(
             repo["http_url_to_repo"],
             settings["Repositories"]["Path"] + repo["path_with_namespace"],
@@ -50,8 +49,7 @@ def manage_repo(list_archived, settings, repo):
             }
         )
 
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
+    subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     with io.open("settings.json", "w") as outfile:
         json.dump(settings, outfile)
 

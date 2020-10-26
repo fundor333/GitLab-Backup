@@ -33,6 +33,6 @@ if __name__ == "__main__":
     lvg = last_version_gitlab(gitlab_version)
     logger.info(lvg)
     if lvg:
-        print("All Update")
+        print("All Updated")
     else:
         print("To Update")
