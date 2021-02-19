@@ -25,4 +25,4 @@ def get_settings():
         logger.remove()
         logger.add(sys.stderr, level="ERROR")
         logger.add(sys.stdout, level=settings['GitLab']['logger_level'])
-        return settings
+    return settings
